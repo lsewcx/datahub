@@ -1,2 +1,5 @@
 fastapi[standard]
 opencv-python
+loguru
+tqdm
+pytest
