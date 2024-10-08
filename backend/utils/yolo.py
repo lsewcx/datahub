@@ -2,6 +2,7 @@ import os
 import shutil
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
+from loguru import logger
 
 def export_to_yolo_format(
     dataset_path: str,
@@ -94,7 +95,7 @@ def export_to_yolo_format(
 
     class_names = sorted(list(class_names))
     nc = len(class_names)
-    names = [f'i' for i in class_names]  
+    names = [f'{i}' for i in class_names]  
 
     # 生成 data.yaml 文件
     data_yaml_content = f"""
@@ -123,11 +124,12 @@ def progress_callback(processed, total):
     print(f"Processed {processed}/{total} files")
 
 if __name__ == "__main__":
+    logger.debug(
     export_to_yolo_format(
         dataset_path='data',
-        train_ratio=0.7,
-        val_ratio=0.2,
-        test_ratio=0.1,
-        output_path='yolo',
+        train_ratio=1,
+        val_ratio=0,
+        test_ratio=0,
+        output_path='test',
         callback=progress_callback
-    )
+    ))
