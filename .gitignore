@@ -26,3 +26,7 @@ backend/yolo/*
 *.njsproj
 *.sln
 *.sw?
+
+# Ignore all __pycache__ directories
+**/__pycache__/
+*.pyc
