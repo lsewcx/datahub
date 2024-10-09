@@ -1,10 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
 from utils.yolo import YOLO
 from loguru import logger
+from sqlalchemy.orm import Session
+from views.index import create_project
+from database.sql import get_db, Base, engine
 
 logger.add("logs/app_{time:YYYY-MM-DD}.log", rotation="00:00")  # 每天午夜轮换日志文件
 
 app = FastAPI()
+Base.metadata.create_all(bind=engine)
+
 
 @app.post("/yolo/export")
 def export_to_yolo(dataset_path: str, train_ratio: float, val_ratio: float, test_ratio: float, output_path: str):
@@ -16,6 +21,13 @@ def export_to_yolo(dataset_path: str, train_ratio: float, val_ratio: float, test
         test_ratio=test_ratio,
         output_path=output_path,
     )
+
+@app.post("/projects/create")
+def create_new_project(name: str, badge: str, date: str, zip_path: str, description: str, db: Session = Depends(get_db)):
+    try:
+        return create_project(db, name, badge, date, zip_path, description)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn

@@ -20,7 +20,7 @@
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </CardTitle>
-                        <CardDescription>{{ item.date }}</CardDescription>
+                        <CardDescription>{{ item.date }} </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Badge>{{ item.badge }}</Badge>
