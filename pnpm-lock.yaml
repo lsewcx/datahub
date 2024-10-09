@@ -23,6 +23,9 @@ importers:
       lucide-vue-next:
         specifier: ^0.451.0
         version: 0.451.0(vue@3.5.11(typescript@5.6.2))
+      moment:
+        specifier: ^2.30.1
+        version: 2.30.1
       path:
         specifier: ^0.12.7
         version: 0.12.7
@@ -793,6 +796,9 @@ packages:
 
   mlly@1.7.2:
     resolution: {integrity: sha512-tN3dvVHYVz4DhSXinXIk7u9syPYaJvio118uomkovAtWBT+RdbP6Lfh/5Lvo519YMmwBafwlh20IPTXIStscpA==}
+
+  moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
 
   muggle-string@0.4.1:
     resolution: {integrity: sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==}
@@ -1829,6 +1835,8 @@ snapshots:
       pathe: 1.1.2
       pkg-types: 1.2.1
       ufo: 1.5.4
+
+  moment@2.30.1: {}
 
   muggle-string@0.4.1: {}
 

@@ -14,6 +14,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "lucide-vue-next": "^0.451.0",
+    "moment": "^2.30.1",
     "path": "^0.12.7",
     "radix-vue": "^1.9.7",
     "tailwind-merge": "^2.5.3",
