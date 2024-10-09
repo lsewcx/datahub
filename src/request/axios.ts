@@ -1,5 +1,4 @@
 import axios from "axios";
-import { ElMessage } from "element-plus";
 
 const service = axios.create({
     // 请求的基础路径
@@ -21,9 +20,6 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(response => {
     return response.data;
 }, error => {
-    if(error.response.status === 500) {
-       ElMessage.error('服务器错误');
-    }
     return Promise.reject(error);
 });
 

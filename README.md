@@ -17,7 +17,6 @@ pip install -r requirements.txt
 - shadcn-vue ui库
 - mock 脱离后端纯前端展示
 - Axios 请求库
-- element-plus ui库
 
 # 关于mock
 mock默认开启如果需要关闭则到.env中把VITE_USE_MOCK设置为false

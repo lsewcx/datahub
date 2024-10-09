@@ -6,8 +6,6 @@ import autoprefixer from 'autoprefixer'
 import dotenv from 'dotenv'
 import path from 'node:path'
 import AutoImport from "unplugin-auto-import/vite";
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { viteMockServe } from 'vite-plugin-mock'
 
 dotenv.config()
@@ -29,11 +27,7 @@ export default defineConfig({
       enable: useMock, // 开发打包开关 
       logger: true, // 是否打印日志
     }),
-    Components({
-      resolvers: [ElementPlusResolver()],
-    }),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
       imports: [
         'vue',
         'vue-router',

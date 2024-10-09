@@ -89,5 +89,15 @@ export default [
         ],
       }
     },
+  },
+  {
+    url: '/api/projects/delete',
+    method : 'post',
+    response: () => {
+      return {
+        code: 200,
+        message: '删除成功'
+      }
+    }
   }
 ]
