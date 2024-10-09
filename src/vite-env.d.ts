@@ -2,18 +2,11 @@
 
 import router from './router/router';
 
-
 declare module '*.vue' {
-
-  import { DefineComponent } from 'vue';
-
-  const component: DefineComponent<{}, {}, any>;
-
-  export default component;
-
+  import { DefineComponent } from 'vue'
+  const component: DefineComponent<{}, {}, any>
+  export default component
 }
-
-
 
 declare module 'tailwindcss' {
     const tailwind: any;
