@@ -17,6 +17,18 @@ class YOLO:
         test_ratio: float,
         output_path: str,
     ) -> dict:
+        """
+        导出YOLO格式数据集
+
+        Args:
+            dataset_path (str): 数据集路径
+            train_ratio (float): 训练集比例
+            val_ratio (float): 验证集比例
+            test_ratio (float): 测试集比例
+            output_path (str): 输出路径
+        Returns:
+            dict: 导出结果
+        """
         os.makedirs(output_path, exist_ok=True)
         tmp_path = os.path.join(output_path, 'tmp')
         os.makedirs(tmp_path, exist_ok=True)
