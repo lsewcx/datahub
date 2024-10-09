@@ -1,7 +1,11 @@
 import axios from '@/request/axios'
 
-export const getProjects = () => {
-    return axios.get('/api/projects')
+export const getProjects = (page: number) => {
+    return axios.get('/api/projects', {
+        params: {
+            page: page
+        }
+    })
 }
 
 export const delProject = (id: string) => {

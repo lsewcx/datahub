@@ -29,6 +29,25 @@
                 </Card>
             </div>
         </div>
+        <!-- 添加一个容器来包裹分页组件，并使用 Flexbox 居中显示 -->
+        <div class="flex justify-center mt-4">
+            <Pagination v-slot="{ page }" :total="totalPages" :sibling-count="1" show-edges :default-page="1" @update:page="handlePageChange">
+                <PaginationList v-slot="{ items }" class="flex items-center gap-1">
+                    <PaginationFirst />
+                    <PaginationPrev />
+                    <template v-for="(item, index) in items">
+                        <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
+                            <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'">
+                                {{ item.value }}
+                            </Button>
+                        </PaginationListItem>
+                        <PaginationEllipsis v-else :key="item.type" :index="index" />
+                    </template>
+                    <PaginationNext />
+                    <PaginationLast />
+                </PaginationList>
+            </Pagination>
+        </div>
         <Dialog v-model:open="showDialog">
             <DialogContent class="sm:max-w-md">
                 <DialogHeader>
@@ -79,13 +98,23 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
 } from '@/components/ui/dialog'
+import {
+    Pagination,
+    PaginationEllipsis,
+    PaginationFirst,
+    PaginationLast,
+    PaginationList,
+    PaginationListItem,
+    PaginationNext,
+    PaginationPrev,
+} from '@/components/ui/pagination'
 import { project } from '../types/index'
 
 const data = ref<project[]>([])
 const showDialog = ref(false)
 const projectIdToDelete = ref<string | null>(null)
+const totalPages = ref(0)
 
 const confirmDelete = (id: string) => {
     projectIdToDelete.value = id
@@ -105,9 +134,17 @@ const deleteProject = async () => {
     }
 }
 
+const fetchProjects = async (page: number) => {
+    const res = await getProjects(page)
+    data.value = res.data
+    totalPages.value = res.totalPage
+}
+
+const handlePageChange = (page: number) => {
+    fetchProjects(page)
+}
+
 onMounted(() => {
-    getProjects().then((res) => {
-        data.value = res.data
-    })
+    fetchProjects(1)
 })
 </script>
