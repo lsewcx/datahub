@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, File, HTTPException, UploadFile
 from utils.yolo import YOLO
 from loguru import logger
 from sqlalchemy.orm import Session
@@ -23,9 +23,9 @@ def export_to_yolo(dataset_path: str, train_ratio: float, val_ratio: float, test
     )
 
 @app.post("/projects/create")
-def create_new_project(name: str, badge: str, date: str, zip_path: str, description: str, db: Session = Depends(get_db)):
+def create_new_project(name: str, badge: str, date: str,description: str, file: UploadFile = File(...), db: Session = Depends(get_db)):
     try:
-        return create_project(db, name, badge, date, zip_path, description)
+        pass
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
