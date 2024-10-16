@@ -1,7 +1,8 @@
+from typing import List
 from fastapi import FastAPI, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 from loguru import logger
-from views.index import create_project
+from views.index import create_project, Project
 from database.sql import get_db, Base, engine
 from utils.file import FileUtils
 import os
@@ -40,6 +41,26 @@ def create_new_project(
         return create_project(db, name, badge, date, output_path, description)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+@app.get("/projects")
+def get_projects(db: Session = Depends(get_db), page: int = 1, size: int = 10):
+    try:
+        offset = (page - 1) * size
+        projects = db.query(Project).offset(offset).limit(size).all()
+        
+        total_projects = db.query(Project).count()
+        total_pages = (total_projects + size - 1) // size  # 计算总页数
+        
+        return {
+            "data": projects,
+            "page": page,
+            "size": size,
+            "total_pages": total_pages,
+            "total_projects": total_projects
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
 
 if __name__ == "__main__":
     import uvicorn

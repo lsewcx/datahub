@@ -11,7 +11,7 @@ import { viteMockServe } from 'vite-plugin-mock'
 dotenv.config()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const useMock = process.env.VITE_USE_MOCK === 'true'
+const useMock = process.env.VITE_USE_MOCK === 'false'
 
 
 export default defineConfig({

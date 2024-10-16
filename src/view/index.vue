@@ -106,7 +106,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { getProjects, delProject, createProject } from '@/api/index'
+import { getProjects, delProject} from '@/api/index'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import moment from 'moment'
@@ -221,6 +221,7 @@ const deleteProject = async () => {
 
 const fetchProjects = async (page: number) => {
     const res = await getProjects(page)
+    console.log(res)
     data.value = res.data
     totalPages.value = res.totalPage
 }
