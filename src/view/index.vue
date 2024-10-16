@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Button class="mt-10 ml-14">创建新项目</Button>
+        <Button class="mt-10 ml-14" @click="openCreateProjectDialog">创建新项目</Button>
         <div class="flex flex-wrap mt-1 ml-10">
             <div v-for="item in data" :key="item.id" class="m-4">
                 <Card class="w-[600px]">
@@ -29,7 +29,6 @@
                 </Card>
             </div>
         </div>
-        <!-- 添加一个容器来包裹分页组件，并使用 Flexbox 居中显示 -->
         <div class="flex justify-center mt-4">
             <Pagination v-slot="{ page }" :total="totalPages" :sibling-count="1" show-edges :default-page="1" @update:page="handlePageChange">
                 <PaginationList v-slot="{ items }" class="flex items-center gap-1">
@@ -66,14 +65,51 @@
                 </DialogFooter>
             </DialogContent>
         </Dialog>
+        <Dialog v-model:open="showCreateProjectDialog">
+            <DialogContent class="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>创建新项目</DialogTitle>
+                    <DialogDescription>
+                        请填写以下信息以创建新项目。
+                    </DialogDescription>
+                </DialogHeader>
+                <form @submit.prevent="createNewProject">
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">项目名称</label>
+                        <input v-model="newProject.name" type="text" id="name" class="mt-1 block w-full" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="block text-sm font-medium text-gray-700">项目描述</label>
+                        <input v-model="newProject.description" type="text" id="description" class="mt-1 block w-full" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="badge" class="block text-sm font-medium text-gray-700">项目徽章</label>
+                        <input v-model="newProject.badge" type="text" id="badge" class="mt-1 block w-full" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="file" class="block text-sm font-medium text-gray-700">项目文件</label>
+                        <input @change="handleFileChange" type="file" class="mt-1 block w-full" required />
+                    </div>
+                    <DialogFooter class="sm:justify-start">
+                        <Button type="submit" variant="default">
+                            创建
+                        </Button>
+                        <Button type="button" variant="secondary" @click="closeCreateProjectDialog">
+                            取消
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { getProjects, delProject } from '@/api/index'
+import { getProjects, delProject, createProject } from '@/api/index'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import moment from 'moment'
 import {
     Card,
     CardContent,
@@ -110,11 +146,21 @@ import {
     PaginationPrev,
 } from '@/components/ui/pagination'
 import { project } from '../types/index'
+import axios from 'axios'
 
 const data = ref<project[]>([])
 const showDialog = ref(false)
+const showCreateProjectDialog = ref(false)
 const projectIdToDelete = ref<string | null>(null)
 const totalPages = ref(0)
+
+const newProject = ref({
+    name: '',
+    description: '',
+    badge: '',
+    date: '',
+    file: null as File | null
+})
 
 const confirmDelete = (id: string) => {
     projectIdToDelete.value = id
@@ -124,6 +170,45 @@ const confirmDelete = (id: string) => {
 const closeDialog = () => {
     showDialog.value = false
     projectIdToDelete.value = null
+}
+
+const openCreateProjectDialog = () => {
+    showCreateProjectDialog.value = true
+}
+
+const closeCreateProjectDialog = () => {
+    showCreateProjectDialog.value = false
+}
+
+const handleFileChange = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (target.files && target.files.length > 0) {
+        newProject.value.file = target.files[0]
+    }
+}
+
+const createNewProject = async () => {
+    try {
+        const formData = new FormData()
+        formData.append('name', newProject.value.name)
+        formData.append('description', newProject.value.description)
+        formData.append('badge', newProject.value.badge)
+        formData.append('date', moment().format('YYYY-MM-DD HH:mm:ss'))
+        if (newProject.value.file) {
+            formData.append('file', newProject.value.file)
+        }
+        await axios.post('/api/projects/create', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((res) => {
+            console.log(res)
+        })
+        closeCreateProjectDialog()
+        fetchProjects(1) // 重新加载项目列表
+    } catch (error) {
+        console.error('创建项目失败:', error)
+    }
 }
 
 const deleteProject = async () => {
